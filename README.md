@@ -65,9 +65,6 @@ LingoGuard/
 │   │   └── lesson_generator.py     # Dynamic lesson generation engine
 │   ├── models/             # Data models & schemas
 │   └── utils/              # Shared utilities & helpers
-│
-├── data/                   # Reference audio and datasets
-├── prompts/                # Prompt templates
 └── README.md
 ```
 
@@ -197,13 +194,6 @@ This project was built with contributions across:
 Contributions, issues, and feature requests are welcome! Feel free to open a [pull request](https://github.com/khushbu4745/LingoGuard/pulls) or [issue](https://github.com/khushbu4745/LingoGuard/issues).
 
 ---
-
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
-
----
-
 <div align="center">
   Made with ❤️ by <a href="https://github.com/khushbu4745">khushbu4745</a>
 </div>
