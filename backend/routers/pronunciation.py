@@ -1,17 +1,24 @@
+import os
+from uuid import uuid4
+
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from fastapi.responses import JSONResponse
+
 
 router = APIRouter(
     prefix="/pronunciation",
     tags=["Pronunciation"]
 )
 
+# Upload directory
+UPLOAD_DIR = "uploads"
+
+# Create uploads folder if it doesn't exist
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
 
 @router.get("/health")
 async def pronunciation_health():
-    """
-    Health check endpoint for pronunciation service.
-    """
     return {
         "status": "success",
         "message": "Pronunciation route working"
@@ -20,17 +27,6 @@ async def pronunciation_health():
 
 @router.post("/evaluate-pronunciation")
 async def evaluate_pronunciation(audio: UploadFile = File(...)):
-    """
-    Dummy pronunciation evaluation endpoint.
-
-    This endpoint currently:
-    - accepts an audio file
-    - validates the file type
-    - returns a placeholder response
-
-    Future pipeline:
-    upload -> preprocess -> MFCC -> DTW -> scoring -> GPT feedback
-    """
 
     allowed_types = [
         "audio/wav",
@@ -48,18 +44,23 @@ async def evaluate_pronunciation(audio: UploadFile = File(...)):
         )
 
     try:
-        file_info = {
-            "filename": audio.filename,
-            "content_type": audio.content_type
-        }
+        # Generate unique filename
+        file_extension = audio.filename.split(".")[-1]
+        unique_filename = f"{uuid4()}.{file_extension}"
+
+        file_path = os.path.join(UPLOAD_DIR, unique_filename)
+
+        # Save uploaded audio
+        with open(file_path, "wb") as buffer:
+            buffer.write(await audio.read())
 
         return JSONResponse(
             status_code=200,
             content={
                 "status": "success",
-                "message": "Pronunciation endpoint ready",
-                "file": file_info,
-                "next_step": "Audio preprocessing pipeline will be integrated here"
+                "message": "Audio uploaded successfully",
+                "filename": unique_filename,
+                "saved_path": file_path
             }
         )
 
